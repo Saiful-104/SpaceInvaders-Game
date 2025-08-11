@@ -66,6 +66,7 @@ public class HomePage extends JPanel implements ActionListener {
         frame.add(new SpaceInvaders());
         frame.revalidate();
         frame.repaint();
+        frame.getContentPane().getComponent(0).requestFocusInWindow();
     }
 
     @Override
@@ -77,7 +78,7 @@ public class HomePage extends JPanel implements ActionListener {
         for (Point star : stars)
             g.fillOval(star.x, star.y, 2, 2);
 
-        // titel tex
+        // Title text
         g.setFont(new Font("Arial", Font.BOLD, 28));
         g.setColor(Color.CYAN);
         g.drawString("WELCOME TO", width / 2 - 110, 70);
@@ -86,7 +87,7 @@ public class HomePage extends JPanel implements ActionListener {
         g.setColor(Color.YELLOW);
         g.drawString("SPACE INVADERS", width / 2 - 170, 120);
 
-        // 🚀 roket after edit version
+        // Rocket drawing when going up
         if (rocketGoingUp) {
             int rocketX = width / 2 - 20;
 

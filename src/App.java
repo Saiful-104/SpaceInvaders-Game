@@ -2,16 +2,21 @@ import javax.swing.*;
 
 public class App {
     public static void main(String[] args) {
-        int tileSize = 32, rows =16, cols=16;
-        int width = tileSize*cols, height = tileSize*rows;
+        int tileSize = 32;
+        int rows = 16;
+        int columns = 16;
+        int boardWidth = tileSize * columns;  // 512px
+        int boardHeight = tileSize * rows;    // 512px
 
-        JFrame frame = new JFrame("Space Invaders - Home");
-        frame.setSize(width, height);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
+        JFrame frame = new JFrame("Space Invaders");
+        frame.setSize(boardWidth, boardHeight);
         frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        frame.add(new HomePage(width, height, frame));
+        HomePage homePage = new HomePage(boardWidth, boardHeight, frame);
+        frame.add(homePage);
+
         frame.setVisible(true);
     }
 }
