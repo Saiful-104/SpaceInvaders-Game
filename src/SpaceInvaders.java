@@ -6,48 +6,48 @@ import java.util.Random;
 
 public class SpaceInvaders extends JPanel implements ActionListener, KeyListener {
 
-    int tileSize = 32;
-    int rows = 16;
-    int cols = 16;
-    int boardWidth = tileSize * cols;
-    int boardHeight = tileSize * rows;
+     int tileSize = 32;
+     int rows = 20;
+     int cols = 30;  // Wider board
+     int boardWidth = tileSize * cols;
+     int boardHeight = tileSize * rows;
 
-    int shipWidth = tileSize * 2;
-    int shipHeight = tileSize;
-    int shipX = tileSize * cols / 2 - tileSize;
-    int shipY = tileSize * rows - tileSize * 2;
-    int shipSpeed = tileSize;
+     int shipWidth = tileSize * 2;
+     int shipHeight = tileSize;
+     int shipX = tileSize * cols / 2 - tileSize;
+     int shipY = tileSize * rows - tileSize * 2;
+     int shipSpeed = tileSize;
 
-    Block ship;
+     Block ship;
 
-    ArrayList<Block> aliens;
-    int alienRows = 2;
-    int alienCols = 3;
-    int alienWidth = tileSize * 2;
-    int alienHeight = tileSize;
-    int alienXStart = tileSize;
-    int alienYStart = tileSize;
-    int alienSpeedX = 1;
+     ArrayList<Block> aliens;
+     int alienRows = 2;
+     int alienCols = 3;
+     int alienWidth = tileSize * 2;
+     int alienHeight = tileSize;
+     int alienXStart = tileSize;
+     int alienYStart = tileSize;
+     int alienSpeedX = 1;
 
-    ArrayList<Block> bullets;
-    int bulletWidth = tileSize / 4;
-    int bulletHeight = tileSize / 4;
-    int bulletSpeedY = -10;
+     ArrayList<Block> bullets;
+     int bulletWidth = tileSize / 4;
+     int bulletHeight = tileSize / 4;
+     int bulletSpeedY = -12;
 
-    int alienBulletSpeedY = 5;
+     int alienBulletSpeedY = 4;
 
-    ArrayList<Block> powerUps;
-    int powerUpSize = tileSize;
-    int powerUpSpeedY = 3;
+     ArrayList<Block> powerUps;
+     int powerUpSize = tileSize;
+     int powerUpSpeedY = 3;
 
-    boolean gameOver = false;
-    int score = 0;
-    Random random = new Random();
+     boolean gameOver = false;
+     int score = 0;
+     Random random = new Random();
 
-    Timer timer;
+     Timer timer;
 
-    Image shipImg;
-    ArrayList<Image> alienImgs;
+     Image shipImg;
+     ArrayList<Image> alienImgs;
 
     class Block {
         int x, y, width, height;
@@ -81,11 +81,11 @@ public class SpaceInvaders extends JPanel implements ActionListener, KeyListener
 
         createAliens();
 
-        timer = new Timer(1000 / 60, this);
+        timer = new Timer(1000/ 60, this);
         timer.start();
     }
 
-    void loadImages() {
+     void loadImages() {
         shipImg = new ImageIcon(getClass().getResource("/img/ship.png")).getImage();
 
         alienImgs = new ArrayList<>();
@@ -95,7 +95,7 @@ public class SpaceInvaders extends JPanel implements ActionListener, KeyListener
         alienImgs.add(new ImageIcon(getClass().getResource("/img/alien-yellow.png")).getImage());
     }
 
-    void createAliens() {
+     void createAliens() {
         aliens.clear();
         for (int c = 0; c < alienCols; c++) {
             for (int r = 0; r < alienRows; r++) {
@@ -108,20 +108,20 @@ public class SpaceInvaders extends JPanel implements ActionListener, KeyListener
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // Ship
+        // Draw ship
         g.drawImage(ship.img, ship.x, ship.y, ship.width, ship.height, null);
 
-        // Aliens
+        // Draw aliens
         for (Block alien : aliens) {
             if (alien.alive) {
                 g.drawImage(alien.img, alien.x, alien.y, alien.width, alien.height, null);
             }
         }
 
-        // Bullets
+        // Draw bullets
         for (Block b : bullets) {
             if (!b.used) {
                 if (b.type == 0) {
@@ -134,13 +134,13 @@ public class SpaceInvaders extends JPanel implements ActionListener, KeyListener
             }
         }
 
-        // Power-ups
+        // Draw power-ups
         g.setColor(Color.GREEN);
         for (Block p : powerUps) {
             g.fillOval(p.x, p.y, p.width, p.height);
         }
 
-        // Score & Game Over Text
+        // Draw score and Game Over
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 32));
         if (gameOver) {
@@ -152,7 +152,7 @@ public class SpaceInvaders extends JPanel implements ActionListener, KeyListener
         }
     }
 
-    void move() {
+     void move() {
         if (gameOver)
             return;
 
@@ -165,6 +165,7 @@ public class SpaceInvaders extends JPanel implements ActionListener, KeyListener
                 }
             }
         }
+
         if (edgeReached) {
             alienSpeedX *= -1;
             for (Block alien : aliens) {
@@ -191,7 +192,7 @@ public class SpaceInvaders extends JPanel implements ActionListener, KeyListener
 
         // Alien random shoot
         for (Block alien : aliens) {
-            if (alien.alive && random.nextInt(300) == 0) {
+            if (alien.alive && random.nextInt(400) == 0) {
                 int bulletX = alien.x + alien.width / 2 - bulletWidth / 2;
                 int bulletY = alien.y + alien.height;
                 Block alienBullet = new Block(bulletX, bulletY, bulletWidth, bulletHeight, null);
@@ -209,7 +210,7 @@ public class SpaceInvaders extends JPanel implements ActionListener, KeyListener
                         alien.alive = false;
                         score += 100;
 
-                        // 20% chance to drop power-up
+                        // 20% chance  power-up
                         if (random.nextInt(5) == 0) {
                             Block powerUp = new Block(alien.x, alien.y, powerUpSize, powerUpSize, null);
                             powerUp.type = 2;
@@ -242,9 +243,9 @@ public class SpaceInvaders extends JPanel implements ActionListener, KeyListener
             }
         }
 
-        bullets.removeIf(b -> b.used);
+        bullets.removeIf(b -> b.used);  //lambda expression
 
-        // Level up when all aliens dead
+        // all aliens dead
         boolean allDead = true;
         for (Block alien : aliens) {
             if (alien.alive) {
@@ -263,11 +264,11 @@ public class SpaceInvaders extends JPanel implements ActionListener, KeyListener
         }
     }
 
-    boolean detectCollision(Block a, Block b) {
+     boolean detectCollision(Block a, Block b) {
         return a.x < b.x + b.width &&
-                a.x + a.width > b.x &&
-                a.y < b.y + b.height &&
-                a.y + a.height > b.y;
+               a.x + a.width > b.x &&
+               a.y < b.y + b.height &&
+               a.y + a.height > b.y;
     }
 
     @Override
@@ -315,10 +316,8 @@ public class SpaceInvaders extends JPanel implements ActionListener, KeyListener
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-    }
+    public void keyReleased(KeyEvent e) { }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-    }
+    public void keyTyped(KeyEvent e) { }
 }
